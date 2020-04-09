@@ -1,6 +1,7 @@
 package com.sxt.crm.model;
 
 public class UserModel {
+    //cookie值
     private String userIdStr;
     private String userName;
     private String trueName;

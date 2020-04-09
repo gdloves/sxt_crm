@@ -10,6 +10,5 @@ import java.util.List;
 
 @Repository
 public interface SaleChanceMapper extends BaseMapper<SaleChance,Integer> {
-    @Override
-    List<SaleChance> selectByParams(BaseQuery baseQuery) throws DataAccessException;
+
 }
