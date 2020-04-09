@@ -1,3 +1,4 @@
+//打开选项卡
 function openTab(text, url, iconCls){
     if($("#tabs").tabs("exists",text)){
         $("#tabs").tabs("select",text);
@@ -13,13 +14,16 @@ function openTab(text, url, iconCls){
 }
 
 
+//退出操作
 function logout() {
-    $.messager.confirm("来自crm","确定退出系统?",function (r) {
+    //提示语
+    $.messager.confirm("退出","确认退出系统吗？",function (r) {
         if(r){
+            //清除cookie
             $.removeCookie("userIdStr");
             $.removeCookie("userName");
             $.removeCookie("trueName");
-            $.messager.alert("来自crm","系统将在三秒后自动退出...","info");
+            //设置定时退出,跳转到登入页面
             setTimeout(function () {
                 window.location.href=ctx+"/index";
             },3000);
@@ -28,29 +32,51 @@ function logout() {
 }
 
 
+
+//打开修改密码对话框
 function openPasswordModifyDialog() {
+    console.log("进来了");
+    //打开对话框
     $("#dlg").dialog("open").dialog("setTitle","密码修改");
+
 }
 
+
+
+//对话框中的保存按钮
 function modifyPassword() {
+    console.log("进来了");
+    //提交
     $("#fm").form("submit",{
         url:ctx+"/user/updatePassword",
-        onSubmit:function () {
+        onSubmint:function () {
+            //校验
             return $("#fm").form("validate");
         },
         success:function (data) {
-            data =JSON.parse(data);
+            data=JSON.parse(data);
+            console.log(data.code);
             if(data.code==200){
-                $.messager.alert("来自crm","密码修改成功,系统将在5秒后执行退出操作...","info");
+                //提示语
+                $.messager.alert("crm","密码修改成功，系统将在5秒后执行退出操作...","info");
+                //清除cookie
                 $.removeCookie("userIdStr");
                 $.removeCookie("userName");
                 $.removeCookie("trueName");
+                //设置定时退出,跳转到登入页面
                 setTimeout(function () {
                     window.location.href=ctx+"/index";
                 },5000)
             }else{
-                $.messager.alert("来自crm",data.msg,"error");
+
+                $.messager.alert("crm",data.msg,"error");
             }
         }
     })
+}
+
+//关闭对话框
+function closeDialog() {
+    console.log("进来了");
+    $("#dlg").dialog("close");
 }

@@ -1,16 +1,18 @@
 function login() {
-    var userName=$("input[name='userName']").val();
-    var userPwd=$("input[name='password']").val();
+   var userName=$("input[name='userName']").val();
+   var userPwd=$("input[name='password']").val();
 
+   //判断用户名和密码是否为空
     if(isEmpty(userName)){
-        alert("请输入用户名!");
+        alert("用户名不能为空！");
         return;
     }
     if(isEmpty(userPwd)){
-        alert("请输入密码!");
+        alert("密码不能为空!");
         return;
     }
 
+    //不为空发送ajax请求
     $.ajax({
         type:"post",
         url:ctx+"/user/login",
@@ -20,23 +22,18 @@ function login() {
         },
         dataType:"json",
         success:function (data) {
-            console.log(data);
             if(data.code==200){
-                var result =data.result;
-                /**
-                 * 写入cookie 到浏览器
-                 */
+                var result=data.result;
+                console.log(result.trueName);
+                //设置cookie
                 $.cookie("userIdStr",result.userIdStr);
                 $.cookie("userName",result.userName);
                 $.cookie("trueName",result.trueName);
+                //进入后台系统界面
                 window.location.href=ctx+"/main";
             }else{
                 alert(data.msg);
             }
         }
     })
-
-
-
-
 }

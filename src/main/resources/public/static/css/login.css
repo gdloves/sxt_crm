@@ -20,8 +20,8 @@ Login page
   -ms-border-radius: 7px;
   -o-border-radius: 7px;
   border-radius: 7px;
-  width: 400px;
-  margin: 40px auto 10px auto;
+  width: 600px;
+  margin: 80px auto 10px auto;
   padding: 30px;
   padding-top: 10px;
   overflow: hidden;
@@ -204,7 +204,7 @@ Login page
 .login .copyright {
   text-align: center;
   margin: 0 auto 30px 0;
-  padding: 10px;
+  padding: 200px;
   color: #7a8ca5;
   font-size: 13px;
 }

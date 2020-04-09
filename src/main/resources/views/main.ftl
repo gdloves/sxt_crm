@@ -73,8 +73,8 @@
 
 
 
-<div id="dlg" class="easyui-dialog" style="width:400px;height:250px;padding: 10px 20px"
-     closed="true" buttons="#dlg-buttons">
+<div id="dlg" class="easyui-dialog" style="width:400px;height:220px;padding: 10px 20px"
+     closed="true" resizable="true" modal="true" buttons="#dlg-buttons">
 
     <form id="fm" method="post">
         <table cellspacing="8px">
@@ -98,9 +98,9 @@
     </form>
 </div>
 
-<div id="dlg-buttons">
+<div id="dlg-buttons" style="padding-bottom: 20px">
     <a href="javascript:modifyPassword()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
-    <a href="javascript:closePasswordModifyDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+    <a href="javascript:closeDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
 </div>
 
 </body>

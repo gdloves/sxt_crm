@@ -21,6 +21,13 @@
     from t_user
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <!--根据用户名查询用户信息-->
+  <select id="queryUserByNP" resultType="com.sxt.crm.vo.User" parameterType="string">
+    select <include refid="Base_Column_List"/>
+    from t_user
+    where is_valid=1 and user_name=#{userName}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_user
     where id = #{id,jdbcType=INTEGER}
