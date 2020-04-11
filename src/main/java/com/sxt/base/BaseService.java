@@ -1,8 +1,13 @@
 package com.sxt.base;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class BaseService<T,ID> {
 
@@ -60,6 +65,8 @@ public abstract class BaseService<T,ID> {
      * @return
      */
     public List<T> selectByParams(BaseQuery baseQuery) throws DataAccessException{
+        /*System.out.println("进来了");
+        System.out.println(baseMapper.selectByParams(baseQuery)==null);*/
         return baseMapper.selectByParams(baseQuery);
     }
 
@@ -100,4 +107,20 @@ public abstract class BaseService<T,ID> {
     public Integer deleteBatch(ID[] ids) throws DataAccessException{
         return baseMapper.deleteBatch(ids);
     }
+
+
+    //分页查询信息
+    public Map<String,Object> queryByParams(BaseQuery baseQuery){
+        /*System.out.println("进来了");*/
+        Map<String,Object> result=new HashMap<String,Object>();
+        //开启分页
+        PageHelper.startPage(baseQuery.getPage(),baseQuery.getRows());
+        //分页查询功能
+        PageInfo<T> pageInfo=new PageInfo<T>(selectByParams(baseQuery));
+       /* System.out.println();*/
+        result.put("total",pageInfo.getTotal());//页码
+        result.put("rows",pageInfo.getList());//每一页的数据
+        return result;
+    }
+
 }

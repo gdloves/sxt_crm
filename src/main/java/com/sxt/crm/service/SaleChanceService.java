@@ -26,7 +26,7 @@ public class SaleChanceService extends BaseService<SaleChance,Integer> {
         PageHelper.startPage(saleChanceQuery.getPage(),saleChanceQuery.getRows());
         //分页查询功能
         PageInfo<SaleChance> pageInfo=new PageInfo<>(selectByParams(saleChanceQuery));
-        result.put("totle",pageInfo.getTotal());//页码
+        result.put("total",pageInfo.getTotal());//页码
         result.put("rows",pageInfo.getList());//每一页的数据
         return result;
     }

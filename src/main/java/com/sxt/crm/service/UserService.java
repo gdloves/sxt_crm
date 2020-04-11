@@ -7,6 +7,7 @@ import com.sxt.crm.dao.UserMapper;
 import com.sxt.crm.model.UserModel;
 import com.sxt.crm.utils.AssertUtil;
 import com.sxt.crm.utils.Md5Util;
+import com.sxt.crm.utils.PhoneUtil;
 import com.sxt.crm.utils.UserIDBase64;
 import com.sxt.crm.vo.User;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 @Service
 @SuppressWarnings("all")//消除所有波浪线
@@ -82,5 +85,86 @@ public class UserService extends BaseService<User,Integer> {
         AssertUtil.isTrue(!(newPassword.equals(configPassword)),"新密码不一致！");
         AssertUtil.isTrue(!(user.getUserPwd().equals(Md5Util.encode(oldPassword))),"原密码错误!");
         AssertUtil.isTrue(newPassword.equals(oldPassword),"新密码不能与旧密码相同！");
+    }
+
+    //用户管理模块：添加功能
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void saveUser(User user){
+        /**
+         * 1.参数校验
+         *     用户名  非空   唯一
+         *     email  非空  格式合法
+         *     手机号 非空  格式合法
+         * 2.设置默认参数
+         *      isValid 1
+         *      createDate   uddateDate
+         *      userPwd   123456->md5加密
+         * 3.执行添加  判断结果
+         */
+        //参数校验方法
+        checkParams(user.getUserName(), user.getEmail(), user.getPhone());
+        //查询该用户是否存在
+        User tempt=baseMapper.queryUserByNP(user.getUserName());
+        AssertUtil.isTrue(tempt!=null && (tempt.getIsValid()==1),"用户已存在！");
+        //设置默认值
+        user.setIsValid(1);
+        user.setCreateDate(new Date());
+        user.setUpdateDate(new Date());
+        //给密码加密
+        user.setUserPwd(Md5Util.encode(user.getUserPwd()));
+        //钓鱼dao层方法，进行添加操作
+        AssertUtil.isTrue(insertSelective(user)<1,"用户添加失败！");
+    }
+    //参数校验方法
+    private void checkParams(String userName, String email, String phone) {
+        AssertUtil.isTrue(StringUtils.isBlank(userName), "用户名不能为空!");
+        AssertUtil.isTrue(StringUtils.isBlank(email), "请输入邮箱地址!");
+        AssertUtil.isTrue(!(PhoneUtil.isMobile(phone)), "手机号格式不合法!");
+    }
+
+    //用户管理：更新操作
+    //用户管理模块：添加功能
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateUser(User user){
+        /**
+         * 1.参数校验
+         *      id     非空   唯一
+         *     用户名  非空   唯一
+         *     email  非空  格式合法
+         *     手机号 非空  格式合法
+         * 2.设置默认参数
+         *      isValid 1
+         *      createDate   uddateDate
+         *      userPwd   123456->md5加密
+         * 3.执行添加  判断结果
+         */
+        //判断是否存在id
+        AssertUtil.isTrue(user.getId()==null || selectByPrimaryKey(user.getId())==null,"更新记录不存在！");
+        //参数校验方法
+        checkParams(user.getUserName(), user.getEmail(), user.getPhone());
+        //查询该用户是否存在
+        User temp=baseMapper.queryUserByNP(user.getUserName());
+        if(temp!=null && (temp.getIsValid()==1)){
+            //其他用户的用户名相同：不只是与自己用户名相同
+            AssertUtil.isTrue(!(user.getId().equals(temp.getId())),"用户已存在！");
+        }
+        //设置默认值
+        user.setUpdateDate(new Date());
+        //钓鱼dao层方法，进行添加操作
+        AssertUtil.isTrue(updateByPrimaryKeySelective(user)<1,"用户更新失败！");
+    }
+
+    //用户管理：删除功能
+    public void deleteUser(Integer userId) {
+
+        User user = selectByPrimaryKey(userId);
+        System.out.println(user);
+        //参数判断
+        AssertUtil.isTrue(null == userId || null == user, "待删除记录不存在!");
+        //设置有效值
+        user.setIsValid(0);
+        //不是真正删除
+        AssertUtil.isTrue(updateByPrimaryKeySelective(user) < 1, "用户记录删除失败!");
+
     }
 }

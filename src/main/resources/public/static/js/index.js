@@ -23,7 +23,6 @@ function login() {
         dataType:"json",
         success:function (data) {
             if(data.code==200){
-                $.messager.alert("crm",data.msg,"info");
                 var result=data.result;
                 console.log(result.trueName);
                 //设置cookie
@@ -33,7 +32,7 @@ function login() {
                 //进入后台系统界面
                 window.location.href=ctx+"/main";
             }else{
-                $.messager.alert("crm",data.msg,"error");
+                alert(data.msg);
             }
         }
     })

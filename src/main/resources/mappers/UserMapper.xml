@@ -126,5 +126,23 @@
   </update>
 
 
+  <!--分页查询用户信息-->
+  <select id="selectByParams" parameterType="com.sxt.crm.query.UserQuery" resultType="com.sxt.crm.vo.User">
+    select <include refid="Base_Column_List"/>
+    from t_user
+    <where>
+       is_valid=1
+      <if test="userName!=null and userName!=''">
+        and user_name like concat('%',#{userName},'%')
+      </if>
+      <if test="phone!=null and phone!=''">
+        and phone=#{phone}
+      </if>
+      <if test="trueName!=null and trueName!=''">
+        and true_name=#{trueName}
+      </if>
+    </where>
+
+  </select>
 
 </mapper>

@@ -99,6 +99,5 @@
         <a href="javascript:closeSaleChanceDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
     </div>
 
-
 </body>
 </html>

@@ -60,7 +60,6 @@ function closeSaleChanceDialog() {
 }
 
 //在打开对话框时清除数据
-
 function clearFormData() {
     $("#customerName").val("");
     $("#chanceSource").val("");
