@@ -1,6 +1,7 @@
 package com.sxt.crm;
 
 import com.alibaba.fastjson.JSON;
+import com.sxt.crm.exceptions.AuthFailedException;
 import com.sxt.crm.exceptions.NoLoginException;
 import com.sxt.crm.exceptions.ParamsException;
 
@@ -63,6 +64,11 @@ public class GlobalExceptionResolver implements HandlerExceptionResolver {
                     mv.addObject("msg",pe.getMsg());
                     mv.addObject("code",pe.getCode());
                 }
+                if(ex instanceof AuthFailedException){
+                    AuthFailedException pe = (AuthFailedException) ex;
+                    mv.addObject("msg",pe.getMsg());
+                    mv.addObject("code",pe.getCode());
+                }
                 return mv;
             }else{
                 /**
@@ -73,6 +79,11 @@ public class GlobalExceptionResolver implements HandlerExceptionResolver {
                 resultInfo.setMsg("系统错误，请稍后再试!");
                 if(ex instanceof ParamsException){
                     ParamsException pe = (ParamsException) ex;
+                    resultInfo.setCode(pe.getCode());
+                    resultInfo.setMsg(pe.getMsg());
+                }
+                if(ex instanceof AuthFailedException){
+                    AuthFailedException pe = (AuthFailedException) ex;
                     resultInfo.setCode(pe.getCode());
                     resultInfo.setMsg(pe.getMsg());
                 }

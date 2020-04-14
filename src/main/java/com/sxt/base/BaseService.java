@@ -2,9 +2,12 @@ package com.sxt.base;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sxt.crm.dao.ModuleMapper;
+import com.sxt.crm.dto.ModuleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +17,8 @@ public abstract class BaseService<T,ID> {
     @Autowired
     private BaseMapper<T,ID> baseMapper;
 
+    @Resource
+    private ModuleMapper moduleMapper;
 
     /**
      * 添加记录返回行数
@@ -122,5 +127,8 @@ public abstract class BaseService<T,ID> {
         result.put("rows",pageInfo.getList());//每一页的数据
         return result;
     }
+
+
+
 
 }

@@ -1,7 +1,6 @@
 package com.sxt.crm.controller;
 
 import com.sxt.base.BaseController;
-import com.sxt.crm.exceptions.ParamsException;
 import com.sxt.crm.model.ResultInfo;
 import com.sxt.crm.model.UserModel;
 import com.sxt.crm.query.UserQuery;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -76,6 +74,9 @@ public class UserController extends BaseController {
     @RequestMapping("user/save")
     @ResponseBody
     public ResultInfo saveUser(User user){
+        user.getRoleIds().forEach(roleId->{
+            System.out.println(roleId);
+        });
         //调用service层方法
         userService.saveUser(user);
         return success("添加成功！");

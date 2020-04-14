@@ -32,8 +32,8 @@
     delete from t_user
     where id = #{id,jdbcType=INTEGER}
   </delete>
-
-  <insert id="insertSelective" parameterType="com.sxt.crm.vo.User">
+  <!--返回主见-->
+  <insert id="insertHasKey" parameterType="com.sxt.crm.vo.User" useGeneratedKeys="true" keyProperty="id">
     insert into t_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -94,6 +94,9 @@
       </if>
     </trim>
   </insert>
+
+
+
   <update id="updateByPrimaryKeySelective" parameterType="com.sxt.crm.vo.User">
     update t_user
     <set>
@@ -126,23 +129,25 @@
   </update>
 
 
-  <!--分页查询用户信息-->
+  <!--分页查询用户信息和角色-->
   <select id="selectByParams" parameterType="com.sxt.crm.query.UserQuery" resultType="com.sxt.crm.vo.User">
-    select <include refid="Base_Column_List"/>
-    from t_user
+    select
+    u.*,
+    IFNULL(GROUP_CONCAT(ur.role_id),"") as rids
+    from t_user u LEFT JOIN t_user_role ur on u.id  =ur.user_id
     <where>
-       is_valid=1
-      <if test="userName!=null and userName!=''">
+      is_valid=1
+      <if test="null !=userName and userName !=''">
         and user_name like concat('%',#{userName},'%')
       </if>
-      <if test="phone!=null and phone!=''">
-        and phone=#{phone}
+      <if test="null !=phone and phone !=''">
+        and phone =#{phone}
       </if>
-      <if test="trueName!=null and trueName!=''">
-        and true_name=#{trueName}
+      <if test="null !=trueName and trueName !=''">
+        and true_name =#{trueName}
       </if>
     </where>
-
+    GROUP BY u.id
   </select>
 
 </mapper>

@@ -210,7 +210,7 @@
     <delete id="deleteBatch">
         delete from t_sale_chance where id in
         <foreach collection="array" item="item" open="(" separator="," close=")">
-            #{item}
+           #{item}
         </foreach>
     </delete>
 </mapper>

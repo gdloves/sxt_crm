@@ -4,25 +4,33 @@ package com.sxt.crm.service;
 import com.sxt.base.BaseService;
 
 import com.sxt.crm.dao.UserMapper;
+import com.sxt.crm.dao.UserRoleMapper;
 import com.sxt.crm.model.UserModel;
 import com.sxt.crm.utils.AssertUtil;
 import com.sxt.crm.utils.Md5Util;
 import com.sxt.crm.utils.PhoneUtil;
 import com.sxt.crm.utils.UserIDBase64;
 import com.sxt.crm.vo.User;
+import com.sxt.crm.vo.UserRole;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @SuppressWarnings("all")//消除所有波浪线
 public class UserService extends BaseService<User,Integer> {
    @Autowired
    private UserMapper baseMapper;
+
+   @Autowired
+   private UserRoleMapper userRoleMapper;
+
     //用户登入
     public UserModel login(String userName, String userPwd){
         /**
@@ -111,15 +119,59 @@ public class UserService extends BaseService<User,Integer> {
         user.setCreateDate(new Date());
         user.setUpdateDate(new Date());
         //给密码加密
-        user.setUserPwd(Md5Util.encode(user.getUserPwd()));
+        user.setUserPwd(Md5Util.encode("123456"));
         //钓鱼dao层方法，进行添加操作
-        AssertUtil.isTrue(insertSelective(user)<1,"用户添加失败！");
+        AssertUtil.isTrue(insertHasKey(user)==null,"用户添加失败！");
+        //获取主键
+        int userId=user.getId();
+        /*System.out.println("userId:"+userId);
+        System.out.println("RoleIds:"+user.getRoleIds());*/
+        /**
+         * 用户角色分配
+         *    userId
+         *    roleIds
+         */
+        //角色信息添加操作
+        relaionUserRole(userId,user.getRoleIds());
+
     }
+
     //参数校验方法
     private void checkParams(String userName, String email, String phone) {
         AssertUtil.isTrue(StringUtils.isBlank(userName), "用户名不能为空!");
         AssertUtil.isTrue(StringUtils.isBlank(email), "请输入邮箱地址!");
         AssertUtil.isTrue(!(PhoneUtil.isMobile(phone)), "手机号格式不合法!");
+    }
+
+    //封装方法
+    private void relaionUserRole(int useId, List<Integer> roleIds) {
+        /**
+         * 更新：
+         * 用户角色分配
+         *   原始角色不存在   添加新的角色记录
+         *   原始角色存在     添加新的角色记录
+         *   原始角色存在     清空所有角色
+         *   原始角色存在     移除部分角色
+         * 如何进行角色分配???
+         *  如果用户原始角色存在  首先清空原始所有角色
+         *  添加新的角色记录到用户角色表
+         */
+        int count = userRoleMapper.countUserRoleByUserId(useId);
+        if (count > 0) {
+            AssertUtil.isTrue(userRoleMapper.deleteUserRoleByUserId(useId) != count, "用户角色分配失败!");
+        }
+        if (null != roleIds && roleIds.size() > 0) {
+            List<UserRole> userRoles = new ArrayList<UserRole>();
+            roleIds.forEach(roleId -> {
+                UserRole userRole = new UserRole();
+                userRole.setUserId(useId);
+                userRole.setRoleId(roleId);
+                userRole.setCreateDate(new Date());
+                userRole.setUpdateDate(new Date());
+                userRoles.add(userRole);
+            });
+            AssertUtil.isTrue(userRoleMapper.insertBatch(userRoles) < userRoles.size(), "用户角色分配失败!");
+        }
     }
 
     //用户管理：更新操作
@@ -152,15 +204,23 @@ public class UserService extends BaseService<User,Integer> {
         user.setUpdateDate(new Date());
         //钓鱼dao层方法，进行添加操作
         AssertUtil.isTrue(updateByPrimaryKeySelective(user)<1,"用户更新失败！");
+        //角色更新操作
+        relaionUserRole(user.getId(),user.getRoleIds());
     }
 
     //用户管理：删除功能
+    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteUser(Integer userId) {
 
         User user = selectByPrimaryKey(userId);
         System.out.println(user);
         //参数判断
         AssertUtil.isTrue(null == userId || null == user, "待删除记录不存在!");
+        //删除角色信息
+        int count = userRoleMapper.countUserRoleByUserId(userId);
+        if (count > 0) {
+            AssertUtil.isTrue(userRoleMapper.deleteUserRoleByUserId(userId) != count, "用户角色分配失败!");
+        }
         //设置有效值
         user.setIsValid(0);
         //不是真正删除

@@ -34,6 +34,7 @@ function  clearFormData(){
     $("#trueName").val("");
     $("#phone").val("");
     $("input[name='id']").val("");
+    $("#roleIds").combobox("setValue","");
 }
 
 //保存按钮
@@ -56,7 +57,8 @@ function openUserModifyDialog() {
         $.messager.alert("crm","不支持批量修改！","error");
         return;
     }
-
+    //角色信息展示
+    rows[0].roleIds=rows[0].rids.split(",");
     //符合条件时，填充数据
     $("#fm").form("load",rows[0]);
     //打开对话框

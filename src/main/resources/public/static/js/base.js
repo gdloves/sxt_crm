@@ -3,9 +3,34 @@
  * @param dlgId   对话框节点id
  * @param title   对话框标题
  */
-//打开对话框
+//打开对话框：添加
 function openDialog(dlgId,title) {
     $("#"+dlgId).dialog("open").dialog("setTitle",title);
+}
+
+
+/**
+ *
+ * @param dataGridId  表格id
+ * @param formId      表单id
+ * @param dlgId      对话框id
+ * @param title       对话框标题
+ */
+//打开对话框：更新
+function openModifyDialog(dataGridId,formId,dlgId,title) {
+    var rows=$("#"+dataGridId).datagrid("getSelections");
+    if(rows.length==0){
+        $.messager.alert("来自crm","请选择待修改的数据!","error");
+        return;
+    }
+    if(rows.length>1){
+        $.messager.alert("来自crm","暂不支持批量修改!","error");
+        return;
+    }
+    //填充数据
+    $("#"+formId).form("load",rows[0]);
+    //打开对话框
+    openDialog(dlgId,title);
 }
 
 //关闭对话框
@@ -44,28 +69,6 @@ function saveOrUpdateRecode(saveUrl,updateUrl,dlgId,search,clearData) {
     })
 }
 
-
-/**
- *
- * @param dataGridId  表格id
- * @param formId      表单id
- * @param dlgId      对话框id
- * @param title       对话框标题
- */
-function openModifyDialog(dataGridId,formId,dlgId,title) {
-    var rows=$("#"+dataGridId).datagrid("getSelections");
-    if(rows.length==0){
-        $.messager.alert("来自crm","请选择待修改的数据!","error");
-        return;
-    }
-    if(rows.length>1){
-        $.messager.alert("来自crm","暂不支持批量修改!","error");
-        return;
-    }
-
-    $("#"+formId).form("load",rows[0]);
-    openDialog(dlgId,title);
-}
 
 /**
  *

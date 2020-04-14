@@ -60,6 +60,16 @@
                 <td><input type="text" id="phone" name="phone"  class="easyui-validatebox" required="true"/>
                     <font color="red">*</font></td>
             </tr>
+
+            <tr>
+                <td>角色：</td>
+                <td>
+                    <input id="roleIds" name="roleIds" class="easyui-combobox" name="dept"
+                           valueField="id" textField="text" url="${ctx}/role/queryAllRoles"
+                           panelHeight="auto" editable="false" multiple="true" style="width: 240px;"/>
+                </td>
+            </tr>
+
         </table>
         <input name="id" type="hidden"/>
     </form>
