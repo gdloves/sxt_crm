@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -100,5 +101,13 @@ public class UserController extends BaseController {
         //调用service层方法
         userService.deleteUser(userId);
         return success("删除成功！");
+    }
+
+    //查询客户经理
+    @RequestMapping("user/queryAllCustomerManager")
+    @ResponseBody
+    public List<Map<String,Object>> queryAllCustomerManager(){
+        return userService.queryAllCustomerManager();
+
     }
 }

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sxt.crm.dao.ModuleMapper;
 import com.sxt.crm.dto.ModuleDto;
+import com.sxt.crm.vo.CustomerServe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 
@@ -127,6 +128,7 @@ public abstract class BaseService<T,ID> {
         result.put("rows",pageInfo.getList());//每一页的数据
         return result;
     }
+
 
 
 }

@@ -47,6 +47,6 @@ public class IndexController extends BaseController {
         req.getSession().setAttribute("modules",moduleService.queryUserHasRoleHasModuleDtos(userId));
         //查询到的信息存到作用域中
         req.setAttribute("user", userService.selectByPrimaryKey(userId));
-        return "main02";//视图
+        return "main";//视图
     }
 }

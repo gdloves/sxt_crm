@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @SuppressWarnings("all")//消除所有波浪线
@@ -225,6 +226,13 @@ public class UserService extends BaseService<User,Integer> {
         user.setIsValid(0);
         //不是真正删除
         AssertUtil.isTrue(updateByPrimaryKeySelective(user) < 1, "用户记录删除失败!");
+
+    }
+
+
+    //分配人
+    public List<Map<String,Object>> queryAllCustomerManager(){
+        return baseMapper.queryAllCustomerManager();
 
     }
 }
