@@ -1,4 +1,4 @@
-package com.sxt.proxy;
+package com.sxt.crm.proxy;
 
 import com.sxt.crm.annotaions.RequirePermission;
 import com.sxt.crm.exceptions.AuthFailedException;

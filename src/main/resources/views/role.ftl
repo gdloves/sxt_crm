@@ -61,7 +61,6 @@
     </div>
 
     <#--权限对话框-->
-
     <div id="module" class="easyui-dialog" style="width:600px;height:300px;padding: 10px 20px"
          closed="true" >
         <#--zTree模板-->

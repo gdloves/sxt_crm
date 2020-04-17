@@ -1,23 +1,26 @@
 package com.sxt.crm.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-public class Role {
+public class CustomerRep {
     private Integer id;
 
-    private String roleName;
+    private Integer lossId;
 
-    private String roleRemark;
+    private String measure;
+
+    private Integer isValid;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateDate;
-
-    private Integer isValid;
 
     public Integer getId() {
         return id;
@@ -27,20 +30,28 @@ public class Role {
         this.id = id;
     }
 
-    public String getRoleName() {
-        return roleName;
+    public Integer getLossId() {
+        return lossId;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName == null ? null : roleName.trim();
+    public void setLossId(Integer lossId) {
+        this.lossId = lossId;
     }
 
-    public String getRoleRemark() {
-        return roleRemark;
+    public String getMeasure() {
+        return measure;
     }
 
-    public void setRoleRemark(String roleRemark) {
-        this.roleRemark = roleRemark == null ? null : roleRemark.trim();
+    public void setMeasure(String measure) {
+        this.measure = measure == null ? null : measure.trim();
+    }
+
+    public Integer getIsValid() {
+        return isValid;
+    }
+
+    public void setIsValid(Integer isValid) {
+        this.isValid = isValid;
     }
 
     public Date getCreateDate() {
@@ -57,13 +68,5 @@ public class Role {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
-    }
-
-    public Integer getIsValid() {
-        return isValid;
-    }
-
-    public void setIsValid(Integer isValid) {
-        this.isValid = isValid;
     }
 }
